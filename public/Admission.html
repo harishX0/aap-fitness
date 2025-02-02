@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Admission Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .price {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .payment-options {
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+    <h1>Gym Admission Form</h1>
+
+    <div class="container">
+        <form id="admissionForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contact">Contact Number:</label>
+                <input type="tel" id="contact" name="contact" required>
+            </div>
+
+            <div class="form-group">
+                <label for="plan">Select Membership Plan:</label>
+                <select id="plan" name="plan" required>
+                    <option value="" disabled selected>Select a plan</option>
+                    <option value="basic">Basic Plan - ₹999</option>
+                    <option value="standard">Standard Plan - ₹2499</option>
+                    <option value="premium">Premium Plan - ₹4499</option>
+                </select>
+                <div id="planPrice" class="price"></div>
+            </div>
+
+            <button type="submit" class="btn">Next</button>
+        </form>
+
+        <div id="paymentSection" class="payment-options">
+            <h2>Select Payment Method</h2>
+            <button class="btn" id="payNowBtn">Pay with Razorpay</button>
+        </div>
+    </div>
+
+    <script>
+        const planSelect = document.getElementById('plan');
+        const planPrice = document.getElementById('planPrice');
+        const admissionForm = document.getElementById('admissionForm');
+        const paymentSection = document.getElementById('paymentSection');
+        const payNowBtn = document.getElementById('payNowBtn');
+        
+        // Display the selected plan price
+        planSelect.addEventListener('change', function () {
+            const selectedPlan = this.value;
+            let price;
+
+            switch (selectedPlan) {
+                case 'basic':
+                    price = '₹999';
+                    break;
+                case 'standard':
+                    price = '₹2499';
+                    break;
+                case 'premium':
+                    price = '₹4499';
+                    break;
+                default:
+                    price = '';
+            }
+            planPrice.textContent = `Selected Plan Price: ${price}`;
+        });
+
+        // Handle form submission
+        admissionForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Show payment section
+            paymentSection.style.display = 'block';
+        });
+
+        // Handle payment button click
+        payNowBtn.addEventListener('click', function () {
+            // Get user details
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const contact = document.getElementById('contact').value;
+            const selectedPlan = planSelect.value;
+
+            // Map plan to amount
+            const amounts = {
+                basic: 999,
+                standard: 2499,
+                premium: 4499
+            };
+
+            const amount = amounts[selectedPlan] * 100; // Amount in paise
+
+            // Create order using fetch
+            fetch('http://localhost:4000/create-order', { // Replace with your backend API
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: amount, currency: 'INR' })
+            })
+            .then(response => response.json())
+            .then(order => {
+                const options = {
+                    key: 'rzp_test_L4UnnDOBNtOlfG', // Replace with your Razorpay Key ID
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'Gym Membership',
+                    description: selectedPlan,
+                    order_id: order.id, // Order ID generated in the backend
+                    handler: function (response) {
+                        alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                        // Here you can add code to update your database or notify the user
+                    },
+                    prefill: {
+                        name: name,
+                        email: email,
+                        contact: contact,
+                    },
+                    notes: {
+                        address: 'Customer Address',
+                    },
+                    theme: {
+                        color: '#F37254'
+                    }
+                };
+
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Payment failed! Please try again. ' + err.message);
+            });
+        });
+    </script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>
