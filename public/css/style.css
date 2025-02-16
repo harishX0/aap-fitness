@@ -11,16 +11,16 @@ body {
     background-color: #f4f4f4;
     color: #333;
 }
+
 .container {
     background: url('../img/Fitness.jpg') center/cover no-repeat;
     min-height: 100vh;
     margin-top: 80px;
-    
 }
 
 /* Header full */
 header {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgb(33 85 95 / 88%);
     color: #f39c12;
     padding: 15px 0;
     width: 100%;
@@ -28,10 +28,8 @@ header {
     top: 0;
     left: 0;
     z-index: 1000;
-    
 }
 /* nav logo img all adjust*/
-
 header nav {
     display: flex;
     max-width: 1200px;
@@ -55,6 +53,11 @@ header .logo img {
     border-radius: 50%;
     margin-right: 10px;
 }
+header .logo span a {
+        text-decoration: none;
+        color: aliceblue;
+        font-family: cursive;
+    }
 
 nav ul {
     list-style: none;
@@ -75,13 +78,13 @@ nav ul li a:hover, .active {
     border-bottom: 2px solid #f39c12;
 }
 
-/* Hero Section */
+/* Hero Section ki adjustment */
 .hero {
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     text-align: center;
     padding: 150px 20px;
-   margin-top: 60px;
+    margin-top: 60px;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
     height: 600px;
 }
@@ -97,7 +100,8 @@ nav ul li a:hover, .active {
     margin-bottom: 40px;
 }
 
-.hero .cta {
+.hero .cta, .btn {
+    display: inline-block;
     background-color: #f39c12;
     color: white;
     padding: 12px 25px;
@@ -105,51 +109,175 @@ nav ul li a:hover, .active {
     border: none;
     border-radius: 5px;
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.hero .cta:hover {
+.hero .cta:hover, .btn:hover {
     background-color: #e67e22;
+    transform: scale(1.05);
 }
 
-/* Services */
+/* Services Section */
 .services-overview {
     max-width: 1200px;
-    margin: 100px auto;
+    margin: 80px auto;
     text-align: center;
     padding: 20px;
 }
 
 .services-overview h2 {
-    font-size: 36px;
-    margin-bottom: 40px;
+    font-size: 38px;
+    color: #f39c12;
+    margin-bottom: 35px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
 .service-item {
-    background-color: #ecf0f1;
+    background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 .service-item img {
     width: 100%;
-    height: auto;
+    max-height: 200px;
+    object-fit: cover;
     border-radius: 8px;
     margin-bottom: 15px;
 }
 
 .service-item h3 {
-    font-size: 24px;
-    color: #34495e;
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
 }
+
+.service-item p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .services-overview h2 {
+        font-size: 32px;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.blog-preview {
+    max-width: 1200px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.blog-preview h2 {
+    font-size: 36px;
+    color: #f39c12;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.blog-grid article {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
+}
+
+.blog-grid article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.blog-grid img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.blog-grid h3 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.blog-grid p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.blog-grid a {
+    display: inline-block;
+    margin-top: 15px;
+    color: #f39c12;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.blog-grid a:hover {
+    color: #e67e22;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .blog-preview h2 {
+        font-size: 30px;
+    }
+
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.service-content h3 a {
+    text-decoration: none;
+    color: #f39c12;
+    transition: color 0.3s;
+    font-weight: bold;
+}
+
+.service-content h3 a:hover {
+    color: #e67e22;
+}
+
 
 /* Testimonials */
 .testimonials {
@@ -182,6 +310,7 @@ footer {
     padding: 20px 0;
     text-align: center;
     font-size: 14px;
+    margin-top: 50px;
 }
 
 .footer-content {
@@ -203,19 +332,30 @@ footer a {
 footer a:hover {
     color: #1abc9c;
 }
+.services{
+    
+        margin-top: 180px;
+        text-align: center;
+        
+    
 
+}
 /* Responsive Adjustments */
-@media (max-width: 768px) {
-    header nav {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    nav ul {
+@media (max-width: 900px) {
+    
+    .service-item {
         flex-direction: column;
         text-align: center;
-        gap: 10px;
-        padding-top: 10px;
+    }
+
+    .service-item img {
+        width: 100%;
+        height: 220px;
+    }
+
+    .service-content {
+        width: 100%;
+        padding: 20px;
     }
 
     .hero h1 {
@@ -226,7 +366,7 @@ footer a:hover {
         font-size: 18px;
     }
 
-    .services-grid, .blog-grid {
+    .services-grid {
         grid-template-columns: 1fr;
     }
 }
